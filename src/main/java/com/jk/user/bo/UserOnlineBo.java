@@ -1,16 +1,16 @@
 package com.jk.user.bo;
 
+import com.jk.common.model.UUser;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import com.jk.common.model.UUser;
 /**
  * @author Mr.KangJonney
  * @date   2017年10月10日
  * @remark Session  + User Bo
  */
 public class UserOnlineBo extends UUser implements Serializable {
-
+//在线用户
 	private static final long serialVersionUID = 1L;
 	
 	//Session Id
