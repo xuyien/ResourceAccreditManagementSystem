@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.common.dao.deptDao" >
+<resultMap type="com.jk.common.model.deptuser" id="orgResult">
+		<id column="id" property="id" />
+		<result column="pid"  property="pId"/>
+		<result column="name"  property="name"/>		
+	</resultMap>
+	
+	 <resultMap id="usrMap" type="com.jk.common.model.UUser" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="pswd" property="pswd" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="BIGINT" />
+  </resultMap>
+
+	
+<select id="basicNode" resultMap="orgResult">
+select * from deptuser
+ where pid=0 or pid=1 
+</select>
+
+<select id="sedcondaryNode" resultType="UUser">
+select * from u_user u,usercollect c where 1=1
+<if test="number!=1">
+ and c.deptid=#{number} 
+</if>
+  and c.uid=u.id
+</select>
+
+<select id="selectDept" resultMap="orgResult">
+select * from deptuser where pid!=0
+</select>
+
+<insert id="addDept">
+insert into deptuser  (pid,name) values(1,#{deptName})
+</insert>
+
+<select id="checkDept" resultType="UUser">
+select * from u_user u,usercollect c where c.deptid=#{id} and c.uid=u.id
+</select>
+
+<delete id="deleteDept">
+delete from  deptuser where id=#{id}
+</delete>
+
+<select id="selectdeleteUser" resultMap="usrMap">
+select * from u_user where id=#{id}
+</select>
+
+<delete id="deleteUser">
+delete from u_user where id=#{id}
+</delete>
+
+<update id="updatedeptUser" parameterType="UUser">
+update u_user set nickname=#{nickname},email=#{email},pswd=#{pswd},create_time=now(),last_login_time=now(),status=1 where id=#{id}
+</update>
+
+<delete id="deleteUserCollect">
+delete from usercollect where uid=#{id}
+</delete>
+
+<insert id="addDeptUser" parameterType="UUser">
+insert into u_user(nickname,email,pswd,create_time,last_login_time,status) values(#{nickname},#{email},#{pswd},now(),now(),1)
+</insert>
+
+<insert id="addDeptUserCollect">
+insert into usercollect values(#{id},1)
+</insert>
+
+<select id="selectJustAdd" resultMap="usrMap">
+select id from u_user where email=#{email}
+</select>
+
+<select id="secondDeptNode" resultMap="orgResult">
+select * from deptuser where pid=#{id}
+</select>
+
+<insert id="addingDept" parameterType="deptuser">
+  insert into deptuser (pid,name) values(#{pId},#{name})
+</insert>
+
+<select id="checkCollect" resultType="usercollect">
+     select * from usercollect where uid=#{id}
+</select>
+
+<update id="changOnUsersDept">
+update usercollect set deptid=#{selecter} where uid=#{id}
+</update>
+
+<update id="reNameNode">
+update deptuser set name=#{name} where id=#{id}
+</update>
+
+
+
+</mapper>

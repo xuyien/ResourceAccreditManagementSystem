@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ResourceAccreditManagementSystem:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="ResourceAccreditManagementSystem-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="ResourceAccreditManagementSystem:war exploded" />
+    </root>
+  </artifact>
+</component>

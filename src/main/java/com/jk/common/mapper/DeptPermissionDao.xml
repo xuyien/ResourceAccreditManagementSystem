@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.common.dao.DeptPermissionDao" >
+  <resultMap id="BaseResultMap" type="com.jk.common.model.UPermission" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+   <resultMap id="findNowAllPermission_resultMap" extends="BaseResultMap" type="com.jk.common.model.URole" >
+  	<collection property="permissions" javaType="com.jk.common.model.UPermission">
+  	 	<id column="id" property="id" jdbcType="BIGINT" />
+    	<result column="name" property="name" jdbcType="VARCHAR" />
+    	<result column="url" property="url" jdbcType="VARCHAR" />
+  	</collection>
+  </resultMap>
+  
+  
+<select id="selectAllPermission" resultMap="BaseResultMap">
+select * from u_permission
+</select>
+
+<delete  id="beforeChange">
+    delete from dept_permission where deptId=#{deptid}
+  </delete>
+
+<insert id="permissionSaveOrUpdate">  
+     insert into dept_permission values(#{number},#{mainid})
+</insert>
+
+<select id="selectDeptPerList" resultMap="BaseResultMap">
+select  id,url,name from u_permission p,dept_permission d where 
+d.deptId=#{id} and d.permissionId =p.id
+</select>
+
+<delete id="delDeptPermission">
+delete from dept_permission where permissionId=#{id} and deptId=#{deptId}
+</delete>
+
+
+<select id="initFindDeptByUser" resultType="string">
+select d.id as id from deptuser d,u_user u,usercollect c 
+where u.id=c.uid and c.deptid=d.id and u.email=#{email}
+</select>
+
+<select id="findPermissionByDept" resultType="string">
+select url from u_permission u,dept_permission d 
+where d.deptId =#{id} and d.permissionId=u.id
+</select>
+
+<select id="initFindDeptid" resultType="deptuser">
+select d.id from deptuser d,u_user u,usercollect c 
+where u.id=c.uid and c.deptid=d.id and u.email=#{email}
+</select>
+
+<delete id="beforeChangeUser">
+delete from userpermission where userid=#{id}
+</delete>
+
+<insert id="authorizingPermissionUser">
+insert into userpermission values(#{mainid},#{number})
+</insert>
+</mapper>
